@@ -1,12 +1,12 @@
 # Magei
 Magei is a powerful, intuitive, and consise image manipulation language.
 
-## Doc
+# Doc
 
-### Pixels
+## Pixels
 Magei is an image manipulation language, and of course, images are made out of pixels. Magei keeps track of all of the pixels of the input image and loops through the selected group of pixels automatically to apply code to them. All pixels are, fundamentally, just the standard `red`, `green`, `blue` and `alpha` values. That's how the computer displays them anyway. But as humans, we're sometimes more interested in more abstract ideas like hue and brightness, or how each pixel relates to the other pixels nearby. Luckily, that's exactly what Magei is designed for.
 
-### Math
+## Math
 You can do math just like most programming languages:
 
 ```
@@ -16,7 +16,7 @@ You can do math just like most programming languages:
 
 There are a few other math symbols, but all of the basic Magei operators are more or less the same as Haskell or Python's infix operators.
 
-### Check
+## Check
 A check is a condition which will return true or false when run, which can be created before use. Here's an example:
 
 ```
@@ -25,7 +25,7 @@ check red: R > 50%
 
 This check will return true if the `r`, aka redness value of a given pixel is over 50% of the maximum. This time we assigned the check by using the `check` keyword, but we could just as easily have just used `r > 50%` later instead. This leads us into the next point, conditions.
 
-### For
+## For
 A for statement is a condition that will run on every currently selected pixel in the image, and change whether they're selected or not. For example:
 
 ```
@@ -52,7 +52,7 @@ An effect is an operation which automatically acts on the selected pixel. There 
 - `y` / Yellow effect
 - `k` / Blackness effect
 
-### Creating Effects
+## Creating Effects
 As stated before, there are basic effects that Magei has by default, but you can create your own. An effect is a function that takes some input numbers and then modifies the current selection. Here's an example of declaring a new effect:
 
 ```
@@ -69,7 +69,7 @@ purpleify 40
 
 Since we didn't use the `for` statement this will just run on every single pixel in our image. Now everything is purpley-er I guess.
 
-### Effects vs Properties
+## Effects vs Properties
 By now you may have noticed that our capitalization of our letters when referencing red, green, and blue for example are a bit erratic. Sometimes we use a capital `G` to represent green, other times a lowercase `b` to represent blue. There's a good reason for that. In Magei, there are a handful of predefined keywords, but capitalized names are used to represent *properties of the current pixel*, while lowercase / camelhump names are used for *effects*.
 
 As an example, let's run this line of code:
@@ -80,7 +80,7 @@ What we're really doing here is selecting all pixels that match the check condit
 
 We'll need another section to list all of our properties, because, although most effects have a matching property, there are actually some extra properties.
 
-### Properties
+## Properties
 Here's a list of all properties.
 
 - `R` / Red. The redness property
