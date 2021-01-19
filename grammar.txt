@@ -1,0 +1,6 @@
+
+expression : term ((ADD|NEGATE)) term
+
+term : factor ((MULTIPLY|DIVIDE) factor)
+
+factor : INT|FLOAT

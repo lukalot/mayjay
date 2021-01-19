@@ -73,7 +73,7 @@ function formatTokensToString( array ) {
 	let res = ''
 	// and it will do so by doing a thing
 	for (let item of array) {
-		res = res + `${item.token_type.description}`
+		res = res + `${item.type.description}`
 		if (item.value) res = res + `:${item.value}`
 		res += '\n'
 	}
@@ -82,7 +82,7 @@ function formatTokensToString( array ) {
 
 class Token {
 	constructor(type, value) {
-		this.token_type = type;
+		this.type = type;
 		this.value = value;
 	}
 	represent() {
@@ -99,7 +99,7 @@ class Lexer {
 
 	tokenize() {
 		let tokens = [];
-		let processing_text = this.text;
+		let processing_text = this.text; // if I was smart I would have named this variable 'lext'
 		while (processing_text) {
 			let matched = false;
 			for (let i in TOKEN_TYPES) {
@@ -130,14 +130,95 @@ class Lexer {
 	}
 }
 
+class NumberNode {
+	constructor(token) {
+		this.token = token;
+	}
+
+	represent() {
+		return `${this.token}`;
+	}
+}
+
+class BinaryOperationNode {
+	constructor(left_node, operation_token, right_node) {
+		this.left_node = left_node;
+		this.operation_token = operation_token;
+		this.right_node = right_node;
+	}
+
+	represent() {
+		return `(${this.left_node}, ${this.operation_token}, ${this.right_node})`
+	}
+}
+
+class Parser {
+	constructor(tokens) {
+		this.tokens = tokens;
+		this.index = 1;
+		this.advance()
+	}
+
+	advance() {
+		this.index += 1;
+		if (this.index < this.tokens.length) {
+			this.current_token = this.tokens[this.index]
+		}
+		return this.current_token;
+	}
+
+	parse() {
+		let res = this.expression();
+		return res
+	}
+
+	binaryOperation(inputFunction, operations) {
+		let left = inputFunction()
+
+		// Check if this token is in the list
+		while (operations.indexOf(this.current_token.type) >= 0) {
+			let operation_token = this.current_token;
+			this.advance();
+			let right = inputFunction();
+			left = new BinaryOperationNode(left, operation_token, right);
+		}
+		return left;
+	}
+
+	factor() {
+		let token = this.current_token;
+		if (token.type === TOKEN_TYPES.TYPE_NUMBER.ID) {
+			this.advance()
+			return new NumberNode(token)
+		}
+	}
+
+	term() {
+		return this.binaryOperation(this.factor.bind(this), [TOKEN_TYPES.TYPE_MULTIPLY.ID, TOKEN_TYPES.TYPE_DIVIDE.ID])
+	}
+
+	expression() {
+		return this.binaryOperation(this.term.bind(this), [TOKEN_TYPES.TYPE_ADD.ID, TOKEN_TYPES.TYPE_NEGATE.ID])
+	}
+}
+
 // RUN
 function run(text) {
 	let lexer = new Lexer(text);
 	let tokens = lexer.tokenize();
-	console.log("\n" + formatTokensToString(tokens))
+	//if (error) return null, error
+
+	// Abstract syntax tree time
+	let parser = new Parser(tokens)
+	let tree = parser.parse()
 	
+	console.log("\n" + formatTokensToString(tokens))
+	console.log(tree)
+
 	return tokens;
 }
 
-run(prompt('Input:'));
+while (true) {
+	run(prompt('Input:'));
+}
 
