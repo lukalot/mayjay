@@ -1,7 +1,7 @@
 # Documentation
 
 ## Pixels
-Mayjay is an image manipulation language, and of course, images are made out of pixels. Magei keeps track of all of the pixels of the input image and loops through the selected group of pixels automatically to apply code to them. All pixels are, fundamentally, just the standard `red`, `green`, `blue` and `alpha` values. That's how the computer displays them anyway. But as humans, we're sometimes more interested in more abstract ideas like hue and brightness, or how each pixel relates to the other pixels nearby. Luckily, that's exactly what Magei is designed for.
+Mayjay is an image manipulation language, and of course, images are made out of pixels. Mayjay keeps track of all of the pixels of the input image and loops through the selected group of pixels automatically to apply code to them. All pixels are, fundamentally, just the standard `red`, `green`, `blue` and `alpha` values. That's how the computer displays them anyway. But as humans, we're sometimes more interested in more abstract ideas like hue and brightness, or how each pixel relates to the other pixels nearby. Luckily, that's exactly what Mayjay is designed for.
 
 ## Math
 You can do math just like most programming languages:
@@ -24,7 +24,6 @@ This check will return true if the `r`, aka redness value of a given pixel is ov
 
 ## For
 A for statement is a condition that will run on every currently selected pixel in the image, and change whether they're selected or not. For example:
-
 ```
 for red: g +49
 ```
