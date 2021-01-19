@@ -8,7 +8,7 @@ You can do math just like most programming languages:
 
 ```
 (128 - 14) * 3 / 5
---> 68
+--> 69
 ```
 
 There are a few other math symbols, but all of the basic Mayjay operators are more or less the same as Haskell or Python's infix operators.
