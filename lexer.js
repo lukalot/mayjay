@@ -87,7 +87,7 @@ class Token {
 	}
 	represent() {
 		if (this.value) {
-			return this.ttype + this.value;
+			return this.type + this.value;
 		}
 	}
 }
