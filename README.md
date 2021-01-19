@@ -1,10 +1,10 @@
-# Magei
-Magei is a powerful, intuitive, and consise image manipulation language.
+# Mayjay
+Mayjay is a powerful, intuitive, and consise image manipulation language.
 
 # Doc
 
 ## Pixels
-Magei is an image manipulation language, and of course, images are made out of pixels. Magei keeps track of all of the pixels of the input image and loops through the selected group of pixels automatically to apply code to them. All pixels are, fundamentally, just the standard `red`, `green`, `blue` and `alpha` values. That's how the computer displays them anyway. But as humans, we're sometimes more interested in more abstract ideas like hue and brightness, or how each pixel relates to the other pixels nearby. Luckily, that's exactly what Magei is designed for.
+Mayjay is an image manipulation language, and of course, images are made out of pixels. Magei keeps track of all of the pixels of the input image and loops through the selected group of pixels automatically to apply code to them. All pixels are, fundamentally, just the standard `red`, `green`, `blue` and `alpha` values. That's how the computer displays them anyway. But as humans, we're sometimes more interested in more abstract ideas like hue and brightness, or how each pixel relates to the other pixels nearby. Luckily, that's exactly what Magei is designed for.
 
 ## Math
 You can do math just like most programming languages:
@@ -14,7 +14,7 @@ You can do math just like most programming languages:
 --> 69
 ```
 
-There are a few other math symbols, but all of the basic Magei operators are more or less the same as Haskell or Python's infix operators.
+There are a few other math symbols, but all of the basic Mayjay operators are more or less the same as Haskell or Python's infix operators.
 
 ## Check
 A check is a condition which will return true or false when run, which can be created before use. Here's an example:
@@ -53,7 +53,7 @@ An effect is an operation which automatically acts on the selected pixel. There 
 - `k` / Blackness effect
 
 ## Creating Effects
-As stated before, there are basic effects that Magei has by default, but you can create your own. An effect is a function that takes some input numbers and then modifies the current selection. Here's an example of declaring a new effect:
+As stated before, there are basic effects that Mayjay has by default, but you can create your own. An effect is a function that takes some input numbers and then modifies the current selection. Here's an example of declaring a new effect:
 
 ```
 effect purpleify amount: r +amount, b +amount
@@ -70,7 +70,7 @@ purpleify 40
 Since we didn't use the `for` statement this will just run on every single pixel in our image. Now everything is purpley-er I guess.
 
 ## Effects vs Properties
-By now you may have noticed that our capitalization of our letters when referencing red, green, and blue for example are a bit erratic. Sometimes we use a capital `G` to represent green, other times a lowercase `b` to represent blue. There's a good reason for that. In Magei, there are a handful of predefined keywords, but capitalized names are used to represent *properties of the current pixel*, while lowercase / camelhump names are used for *effects*.
+By now you may have noticed that our capitalization of our letters when referencing red, green, and blue for example are a bit erratic. Sometimes we use a capital `G` to represent green, other times a lowercase `b` to represent blue. There's a good reason for that. In Mayjay, there are a handful of predefined keywords, but capitalized names are used to represent *properties of the current pixel*, while lowercase / camelhump names are used for *effects*.
 
 As an example, let's run this line of code:
 
