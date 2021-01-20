@@ -57,6 +57,10 @@ const TOKEN_TYPES = {
 		ID: Symbol('BLOCK PRECEDENT'),
 		PATTERN: /^\:/
 	},
+	COMMENT: {
+		ID: Symbol('COMMENT'),
+		PATTERN: /^#.*/
+	},
 	LOOP: {
 		ID: Symbol('LOOP'),
 		PATTERN: /^loop/
@@ -80,12 +84,34 @@ function formatTokensToString( array ) {
 	return res;
 }
 
+// ---------- ERROR HANDLING ---------------
+
+class Error {
+	constructor(name, details) {
+		this.name = name;
+		this.details = details;
+	}
+
+	asString() {
+		res = `${this.name}: '${this.details}'`;
+		return res;
+	}
+}
+
+class IllegalCharacterError extends Error {
+	constructor (details) {
+		super('Illegal Character', details)
+	}
+}
+
+// ------------- LEXER ---------------
+
 class Token {
 	constructor(type, value) {
 		this.type = type;
 		this.value = value;
 	}
-	represent() {
+	[Deno.customInspect]() {
 		if (this.value) {
 			return this.type + this.value;
 		}
@@ -116,27 +142,32 @@ class Lexer {
 				processing_text = processing_text.replace(match, '')
 
 				if ( match ) {
-					let matched = true;
 					if ( TOKEN_TYPES[i].RESOLVE ) {
 						tokens.push(TOKEN_TYPES[i].RESOLVE( match ))
 					} else {
 						tokens.push(new Token(TOKEN_TYPES[i].ID));
 					}
+					matched = true;
 					break;
 				}
 			}
+			if (!matched) {
+				return [], new IllegalCharacterError(processing_text.charAt(0))
+			}
 		}
-		return tokens;
+		return tokens, null;
 	}
 }
+
+// -------------- PARSER ----------------
 
 class NumberNode {
 	constructor(token) {
 		this.token = token;
 	}
 
-	represent() {
-		return `${this.token}`;
+	[Deno.customInspect]() {
+		return 'hello';
 	}
 }
 
@@ -147,16 +178,19 @@ class BinaryOperationNode {
 		this.right_node = right_node;
 	}
 
-	represent() {
-		return `(${this.left_node}, ${this.operation_token}, ${this.right_node})`
+	[Deno.customInspect]() {
+		return `(${
+			this.left_node}, ${
+			this.operation_token}, ${
+			this.right_node})`
 	}
 }
 
 class Parser {
 	constructor(tokens) {
 		this.tokens = tokens;
-		this.index = 1;
-		this.advance()
+		this.index = 0;
+		this.current_token = this.tokens[this.index]
 	}
 
 	advance() {
@@ -169,7 +203,7 @@ class Parser {
 
 	parse() {
 		let res = this.expression();
-		return res
+		return res;
 	}
 
 	binaryOperation(inputFunction, operations) {
@@ -202,10 +236,10 @@ class Parser {
 	}
 }
 
-// RUN
+// -------------- RUN ----------------
 function run(text) {
 	let lexer = new Lexer(text);
-	let tokens = lexer.tokenize();
+	let tokens, error = lexer.tokenize();
 	//if (error) return null, error
 
 	// Abstract syntax tree time
@@ -215,10 +249,15 @@ function run(text) {
 	console.log("\n" + formatTokensToString(tokens))
 	console.log(tree)
 
-	return tokens;
+	return tokens, error;
 }
 
 while (true) {
-	run(prompt('Input:'));
+	let result, error = run(prompt('Input:'));
+	if (error) {
+		console.log(error.asString());
+	} else {
+		console.log(result);
+	}
 }
 
