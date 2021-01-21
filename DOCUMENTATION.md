@@ -25,7 +25,7 @@ This check will return true if the `r`, aka redness value of a given pixel is ov
 ## For
 A for statement is a condition that will run on every currently selected pixel in the image, and change whether they're selected or not. For example:
 ```
-for red: g +49
+for isRed: g +49
 ```
 
 Lets unpack what we just did. We used the `for` keyword to create a for statement, and passed it the check `red`, which we declared earlier in the Check section of this doc. Then we used the `:` symbol to say 'do this', and then applied an effect for every selected pixel.
@@ -70,7 +70,7 @@ By now you may have noticed that our capitalization of our letters when referenc
 
 As an example, let's run this line of code:
 
-```for red: g +B```
+```for isRed: g +B```
 
 What we're really doing here is selecting all pixels that match the check condition `red`, and then using the `g` (greenness) effect to add this pixel's current green property to its current blue property.
 
