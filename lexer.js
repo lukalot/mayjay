@@ -85,22 +85,15 @@ function formatTokensToString(array) {
 }
 
 // ---------- ERROR HANDLING ---------------
-
-class Error {
-	constructor(name, details) {
-		this.name = name;
-		this.details = details;
-	}
-
-	asString() {
-		res = `${this.name}: '${this.details}'`;
-		return res;
+class LexerError extends Error {
+	get name() {
+		return this.constructor.name;
 	}
 }
 
-class IllegalCharacterError extends Error {
-	constructor(details) {
-		super('Illegal Character', details)
+class IllegalCharacterError extends LexerError {
+	constructor(character) {
+		super(`Illegal character "${character}"`);
 	}
 }
 
@@ -153,10 +146,10 @@ class Lexer {
 				}
 			}
 			if (!matched) {
-				return [], new IllegalCharacterError(processing_text.charAt(0))
+				throw new IllegalCharacterError(processing_text.charAt(0));
 			}
 		}
-		return tokens, null;
+		return tokens;
 	}
 }
 
@@ -239,26 +232,31 @@ class Parser {
 
 // -------------- RUN ----------------
 function run(text) {
-	let lexer = new Lexer(text);
-	let tokens, error = lexer.tokenize();
-	//if (error) return null, error
+	const lexer = new Lexer(text);
+	const tokens = lexer.tokenize();
 
 	// Abstract syntax tree time
-	let parser = new Parser(tokens)
-	let tree = parser.parse()
+	const parser = new Parser(tokens);
+	const tree = parser.parse();
 
-	console.log("\n" + formatTokensToString(tokens))
-	console.log(tree)
-
-	return tokens, error;
+	console.log();
+	console.log(tokens);
+	console.log(formatTokensToString(tokens));
+	console.log(tree);
 }
 
 while (true) {
-	let result, error = run(prompt('Input:'));
-	if (error) {
-		console.log(error.asString());
-	} else {
-		console.log(result);
+	const input = prompt('Input:');
+
+	if (input === null) {
+		continue;
+	}
+
+	try {
+		console.log('input = ', input);
+		run(input);
+	} catch (error) {
+		console.log(error.name, error.message);
 	}
 }
 
