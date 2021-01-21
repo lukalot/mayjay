@@ -1,9 +1,9 @@
-
-/* Mayjay Lexer
+/**
+ * Mayjay Lexer
  * written by Lukalot in Vim with love
  *
- * feel free to delete this headline if you wish, just keep the GPLv3 liscense and all is good
-*/
+ * feel free to delete this headline if you wish, just keep the GPLv3 licence and all is good
+ */
 
 // Run with deno ( deno run lexer.js )
 
@@ -11,7 +11,7 @@ const TOKEN_TYPES = {
 	TYPE_NUMBER: { // Integers and Floats
 		ID: Symbol('NUMBER'),
 		PATTERN: /^\d+(\.\d+)?/,
-		RESOLVE: ( content ) => new Token(TOKEN_TYPES.TYPE_NUMBER.ID, Number( content ))
+		RESOLVE: (content) => new Token(TOKEN_TYPES.TYPE_NUMBER.ID, Number(content))
 	},
 	TYPE_ADD: {
 		ID: Symbol('ADD'),
@@ -22,8 +22,8 @@ const TOKEN_TYPES = {
 		PATTERN: /^\-/
 	},
 	TYPE_MULTIPLY: {
-	        ID: Symbol('MULTIPLY'),
-	        PATTERN: /^\*/
+		ID: Symbol('MULTIPLY'),
+		PATTERN: /^\*/
 	},
 	TYPE_DIVIDE: {
 		ID: Symbol('DIVIDE'),
@@ -35,7 +35,7 @@ const TOKEN_TYPES = {
 	},
 	TYPE_RIGHT_PARENTHESES: {
 		ID: Symbol('RIGHT PARENTHESES'),
-		PATTERN: /^\)/		
+		PATTERN: /^\)/
 	},
 	TYPE_END_LINE: {
 		ID: Symbol('END LINE'),
@@ -73,7 +73,7 @@ const TOKEN_TYPES = {
 
 const WHITESPACE_PATTERN = /^\s/;
 
-function formatTokensToString( array ) {
+function formatTokensToString(array) {
 	let res = ''
 	// and it will do so by doing a thing
 	for (let item of array) {
@@ -99,7 +99,7 @@ class Error {
 }
 
 class IllegalCharacterError extends Error {
-	constructor (details) {
+	constructor(details) {
 		super('Illegal Character', details)
 	}
 }
@@ -111,6 +111,7 @@ class Token {
 		this.type = type;
 		this.value = value;
 	}
+
 	[Deno.customInspect]() {
 		if (this.value) {
 			return this.type + this.value;
@@ -119,7 +120,7 @@ class Token {
 }
 
 class Lexer {
-	constructor (text) {
+	constructor(text) {
 		this.text = text;
 	}
 
@@ -131,7 +132,7 @@ class Lexer {
 			for (let i in TOKEN_TYPES) {
 				// remove extra whitespace
 				processing_text = processing_text.replace(WHITESPACE_PATTERN, '')
-				
+
 				// check for a matching token
 				let match = processing_text.match(TOKEN_TYPES[i].PATTERN)
 
@@ -141,9 +142,9 @@ class Lexer {
 				// remove the matched text from the text we're lexing
 				processing_text = processing_text.replace(match, '')
 
-				if ( match ) {
-					if ( TOKEN_TYPES[i].RESOLVE ) {
-						tokens.push(TOKEN_TYPES[i].RESOLVE( match ))
+				if (match) {
+					if (TOKEN_TYPES[i].RESOLVE) {
+						tokens.push(TOKEN_TYPES[i].RESOLVE(match))
 					} else {
 						tokens.push(new Token(TOKEN_TYPES[i].ID));
 					}
@@ -245,7 +246,7 @@ function run(text) {
 	// Abstract syntax tree time
 	let parser = new Parser(tokens)
 	let tree = parser.parse()
-	
+
 	console.log("\n" + formatTokensToString(tokens))
 	console.log(tree)
 
