@@ -131,7 +131,7 @@ class Lexer {
 					if (TOKEN_TYPES[i].RESOLVE) {
 						tokens.push(TOKEN_TYPES[i].RESOLVE(match))
 					} else {
-						tokens.push(new Token(TOKEN_TYPES[i].ID));
+						tokens.push(new Token(TOKEN_TYPES[i].ID, match));
 					}
 					matched = true;
 					break;
