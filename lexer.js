@@ -104,9 +104,7 @@ class Token {
 	}
 
 	[Deno.customInspect]() {
-		if (this.value) {
-			return this.type + this.value;
-		}
+		return `${this.type.toString()} ${this.value}`;
 	}
 }
 
@@ -249,7 +247,6 @@ while (true) {
 	try {
 		run(input.trim());
 	} catch (error) {
-		console.log(error.name, error.message);
+		console.log(error.stack);
 	}
 }
-
