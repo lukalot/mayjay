@@ -71,8 +71,6 @@ const TOKEN_TYPES = {
 	},
 }
 
-const WHITESPACE_PATTERN = /^\s/;
-
 function formatTokensToString(array) {
 	let res = ''
 	// and it will do so by doing a thing
@@ -123,19 +121,15 @@ class Lexer {
 		while (processing_text) {
 			let matched = false;
 			for (let i in TOKEN_TYPES) {
-				// remove extra whitespace
-				processing_text = processing_text.replace(WHITESPACE_PATTERN, '')
-
 				// check for a matching token
-				let match = processing_text.match(TOKEN_TYPES[i].PATTERN)
+				let matches = processing_text.match(TOKEN_TYPES[i].PATTERN);
 
-				// if there's a match, convert the array into the string we need
-				if (match) match = match[0]
+				if (matches) {
+					// if there's a match, convert the array into the string we need
+					const match = matches[0];
+					// remove the matched text from the text we're lexing
+					processing_text = processing_text.replace(match, '').trimStart();
 
-				// remove the matched text from the text we're lexing
-				processing_text = processing_text.replace(match, '')
-
-				if (match) {
 					if (TOKEN_TYPES[i].RESOLVE) {
 						tokens.push(TOKEN_TYPES[i].RESOLVE(match))
 					} else {
@@ -253,8 +247,7 @@ while (true) {
 	}
 
 	try {
-		console.log('input = ', input);
-		run(input);
+		run(input.trim());
 	} catch (error) {
 		console.log(error.name, error.message);
 	}
