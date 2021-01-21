@@ -1,9 +1,9 @@
-
-/* Mayjay Lexer
+/**
+ * Mayjay Lexer
  * written by Lukalot in Vim with love
  *
- * feel free to delete this headline if you wish, just keep the GPLv3 liscense and all is good
-*/
+ * feel free to delete this headline if you wish, just keep the GPLv3 licence and all is good
+ */
 
 // Run with deno ( deno run lexer.js )
 
@@ -11,7 +11,7 @@ const TOKEN_TYPES = {
 	TYPE_NUMBER: { // Integers and Floats
 		ID: Symbol('NUMBER'),
 		PATTERN: /^\d+(\.\d+)?/,
-		RESOLVE: ( content ) => new Token(TOKEN_TYPES.TYPE_NUMBER.ID, Number( content ))
+		RESOLVE: (content) => new Token(TOKEN_TYPES.TYPE_NUMBER.ID, Number(content))
 	},
 	TYPE_ADD: {
 		ID: Symbol('ADD'),
@@ -22,8 +22,8 @@ const TOKEN_TYPES = {
 		PATTERN: /^\-/
 	},
 	TYPE_MULTIPLY: {
-	        ID: Symbol('MULTIPLY'),
-	        PATTERN: /^\*/
+		ID: Symbol('MULTIPLY'),
+		PATTERN: /^\*/
 	},
 	TYPE_DIVIDE: {
 		ID: Symbol('DIVIDE'),
@@ -35,7 +35,7 @@ const TOKEN_TYPES = {
 	},
 	TYPE_RIGHT_PARENTHESES: {
 		ID: Symbol('RIGHT PARENTHESES'),
-		PATTERN: /^\)/		
+		PATTERN: /^\)/
 	},
 	TYPE_END_LINE: {
 		ID: Symbol('END LINE'),
@@ -71,9 +71,7 @@ const TOKEN_TYPES = {
 	},
 }
 
-const WHITESPACE_PATTERN = /^\s/;
-
-function formatTokensToString( array ) {
+function formatTokensToString(array) {
 	let res = ''
 	// and it will do so by doing a thing
 	for (let item of array) {
@@ -85,22 +83,15 @@ function formatTokensToString( array ) {
 }
 
 // ---------- ERROR HANDLING ---------------
-
-class Error {
-	constructor(name, details) {
-		this.name = name;
-		this.details = details;
-	}
-
-	asString() {
-		res = `${this.name}: '${this.details}'`;
-		return res;
+class LexerError extends Error {
+	get name() {
+		return this.constructor.name;
 	}
 }
 
-class IllegalCharacterError extends Error {
-	constructor (details) {
-		super('Illegal Character', details)
+class IllegalCharacterError extends LexerError {
+	constructor(character) {
+		super(`Illegal character "${character}"`);
 	}
 }
 
@@ -111,15 +102,14 @@ class Token {
 		this.type = type;
 		this.value = value;
 	}
+
 	[Deno.customInspect]() {
-		if (this.value) {
-			return this.type + this.value;
-		}
+		return `${this.type.toString()} ${this.value}`;
 	}
 }
 
 class Lexer {
-	constructor (text) {
+	constructor(text) {
 		this.text = text;
 	}
 
@@ -129,33 +119,29 @@ class Lexer {
 		while (processing_text) {
 			let matched = false;
 			for (let i in TOKEN_TYPES) {
-				// remove extra whitespace
-				processing_text = processing_text.replace(WHITESPACE_PATTERN, '')
-				
 				// check for a matching token
-				let match = processing_text.match(TOKEN_TYPES[i].PATTERN)
+				let matches = processing_text.match(TOKEN_TYPES[i].PATTERN);
 
-				// if there's a match, convert the array into the string we need
-				if (match) match = match[0]
+				if (matches) {
+					// if there's a match, convert the array into the string we need
+					const match = matches[0];
+					// remove the matched text from the text we're lexing
+					processing_text = processing_text.replace(match, '').trimStart();
 
-				// remove the matched text from the text we're lexing
-				processing_text = processing_text.replace(match, '')
-
-				if ( match ) {
-					if ( TOKEN_TYPES[i].RESOLVE ) {
-						tokens.push(TOKEN_TYPES[i].RESOLVE( match ))
+					if (TOKEN_TYPES[i].RESOLVE) {
+						tokens.push(TOKEN_TYPES[i].RESOLVE(match))
 					} else {
-						tokens.push(new Token(TOKEN_TYPES[i].ID));
+						tokens.push(new Token(TOKEN_TYPES[i].ID, match));
 					}
 					matched = true;
 					break;
 				}
 			}
 			if (!matched) {
-				return [], new IllegalCharacterError(processing_text.charAt(0))
+				throw new IllegalCharacterError(processing_text.charAt(0));
 			}
 		}
-		return tokens, null;
+		return tokens;
 	}
 }
 
@@ -238,26 +224,29 @@ class Parser {
 
 // -------------- RUN ----------------
 function run(text) {
-	let lexer = new Lexer(text);
-	let tokens, error = lexer.tokenize();
-	//if (error) return null, error
+	const lexer = new Lexer(text);
+	const tokens = lexer.tokenize();
 
 	// Abstract syntax tree time
-	let parser = new Parser(tokens)
-	let tree = parser.parse()
-	
-	console.log("\n" + formatTokensToString(tokens))
-	console.log(tree)
+	const parser = new Parser(tokens);
+	const tree = parser.parse();
 
-	return tokens, error;
+	console.log();
+	console.log(tokens);
+	console.log(formatTokensToString(tokens));
+	console.log(tree);
 }
 
 while (true) {
-	let result, error = run(prompt('Input:'));
-	if (error) {
-		console.log(error.asString());
-	} else {
-		console.log(result);
+	const input = prompt('Input:');
+
+	if (input === null) {
+		continue;
+	}
+
+	try {
+		run(input.trim());
+	} catch (error) {
+		console.log(error.stack);
 	}
 }
-
