@@ -17,7 +17,7 @@ There are a few other math symbols, but all of the basic Mayjay operators are mo
 A check is a condition which will return true or false when run, which can be created before use. Here's an example:
 
 ```
-check red: R > 49%
+check isRed: R > 49%
 ```
 
 This check will return true if the `r`, aka redness value of a given pixel is over 49% of the maximum. This time we assigned the check by using the `check` keyword, but we could just as easily have just used `r > 50%` later instead. This leads us into the next point, conditions.
