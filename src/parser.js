@@ -1,4 +1,4 @@
-import { TOKEN_TYPES } from './tokens.js';
+import { TOKEN_TYPES } from './tokens.ts';
 
 class NumberNode {
 	constructor(token) {

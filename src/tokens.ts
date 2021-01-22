@@ -1,10 +1,15 @@
+type TokenValue = Number | string;
+
 export class Token {
-	constructor(type, value) {
+	public readonly type: symbol;
+	public readonly value: TokenValue;
+
+	constructor(type: symbol, value: TokenValue) {
 		this.type = type;
 		this.value = value;
 	}
 
-	[Deno.customInspect]() {
+	[Deno.customInspect](): string {
 		return `${this.type.toString()} ${this.value}`;
 	}
 }
@@ -13,7 +18,7 @@ export const TOKEN_TYPES = {
 	TYPE_NUMBER: { // Integers and Floats
 		ID: Symbol('NUMBER'),
 		PATTERN: /^\d+(\.\d+)?/,
-		RESOLVE: (content) => new Token(TOKEN_TYPES.TYPE_NUMBER.ID, Number(content))
+		RESOLVE: (content: String) => new Token(TOKEN_TYPES.TYPE_NUMBER.ID, Number(content))
 	},
 	TYPE_ADD: {
 		ID: Symbol('ADD'),

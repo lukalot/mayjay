@@ -5,7 +5,7 @@
  * feel free to delete this headline if you wish, just keep the GPLv3 licence and all is good
  */
 
-import { Token, TOKEN_TYPES } from './tokens.js';
+import { Token, TOKEN_TYPES } from './tokens.ts';
 
 // ---------- ERROR HANDLING ---------------
 class LexerError extends Error {
