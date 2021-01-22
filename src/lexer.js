@@ -5,19 +5,7 @@
  * feel free to delete this headline if you wish, just keep the GPLv3 licence and all is good
  */
 
-// Run with deno ( deno run lexer.js )
-import { TOKEN_TYPES } from './token_types.js'
-
-function formatTokensToString(array) {
-	let res = ''
-	// and it will do so by doing a thing
-	for (let item of array) {
-		res = res + `${item.type.description}`
-		if (item.value) res = res + `:${item.value}`
-		res += '\n'
-	}
-	return res;
-}
+import { Token, TOKEN_TYPES } from './tokens.js';
 
 // ---------- ERROR HANDLING ---------------
 class LexerError extends Error {
@@ -39,17 +27,6 @@ class InvalidSyntaxError extends LexerError {
 }
 
 // ------------- LEXER ---------------
-
-class Token {
-	constructor(type, value) {
-		this.type = type;
-		this.value = value;
-	}
-
-	[Deno.customInspect]() {
-		return `${this.type.toString()} ${this.value}`;
-	}
-}
 
 export class Lexer {
 	constructor(text) {
@@ -85,33 +62,5 @@ export class Lexer {
 			}
 		}
 		return tokens;
-	}
-}
-
-// -------------- PARSER ----------------
-
-class NumberNode {
-	constructor(token) {
-		this.token = token;
-	}
-
-	[Deno.customInspect]() {
-		console.log(this.token)
-		return `${this.token.type}:${this.token.value}`;
-	}
-}
-
-class BinaryOperationNode {
-	constructor(left_node, operation_token, right_node) {
-		this.left_node = left_node;
-		this.operation_token = operation_token;
-		this.right_node = right_node;
-	}
-
-	[Deno.customInspect]() {
-		return `(${
-			this.left_node}, ${
-			this.operation_token}, ${
-			this.right_node})`
 	}
 }

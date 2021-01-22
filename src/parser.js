@@ -1,3 +1,27 @@
+import { TOKEN_TYPES } from './tokens.js';
+
+class NumberNode {
+	constructor(token) {
+		this.token = token;
+	}
+
+	[Deno.customInspect]() {
+		return `${this.token.type}:${this.token.value}`;
+	}
+}
+
+class BinaryOperationNode {
+	constructor(left_node, operation_token, right_node) {
+		this.left_node = left_node;
+		this.operation_token = operation_token;
+		this.right_node = right_node;
+	}
+
+	[Deno.customInspect]() {
+		return `(${this.left_node}, ${this.operation_token}, ${this.right_node})`
+	}
+}
+
 export class Parser {
 	constructor(tokens) {
 		this.tokens = tokens;

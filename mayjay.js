@@ -1,7 +1,18 @@
+import { Lexer } from './src/lexer.js';
+import { Parser } from './src/parser.js';
 
-import { Lexer } from './src/lexer.js'
-import { Parser } from './src/parser.js'
+// Run with deno ( deno run lexer.js )
 
+function formatTokensToString(array) {
+	let res = '';
+	// and it will do so by doing a thing
+	for (let item of array) {
+		res = res + `${item.type.description}`;
+		if (item.value) res = res + `:${item.value}`;
+		res += '\n';
+	}
+	return res;
+}
 
 // -------------- RUN ----------------
 function run(text) {
