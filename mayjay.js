@@ -1,7 +1,7 @@
 import { Lexer } from './src/lexer.js';
 import { Parser } from './src/parser.js';
 
-// Run with deno ( deno run lexer.js )
+// Run with deno ( deno run mayjay.js )
 
 function formatTokensToString(array) {
 	let res = '';
