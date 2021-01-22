@@ -57,17 +57,17 @@ export class Parser {
 
 	factor() {
 		let token = this.current_token;
-		if (token.type === TOKEN_TYPES.TYPE_NUMBER.ID) {
+		if (token.type === TOKEN_TYPES.TYPE_NUMBER.id) {
 			this.advance();
 			return new NumberNode(token);
 		}
 	}
 
 	term() {
-		return this.binaryOperation(this.factor.bind(this), [TOKEN_TYPES.TYPE_MULTIPLY.ID, TOKEN_TYPES.TYPE_DIVIDE.ID]);
+		return this.binaryOperation(this.factor.bind(this), [TOKEN_TYPES.TYPE_MULTIPLY.id, TOKEN_TYPES.TYPE_DIVIDE.id]);
 	}
 
 	expression() {
-		return this.binaryOperation(this.term.bind(this), [TOKEN_TYPES.TYPE_ADD.ID, TOKEN_TYPES.TYPE_NEGATE.ID]);
+		return this.binaryOperation(this.term.bind(this), [TOKEN_TYPES.TYPE_ADD.id, TOKEN_TYPES.TYPE_NEGATE.id]);
 	}
 }

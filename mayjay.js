@@ -1,4 +1,4 @@
-import { Lexer } from './src/lexer.js';
+import { Lexer } from './src/lexer.ts';
 import { Parser } from './src/parser.js';
 
 // Run with deno ( deno run mayjay.js )
@@ -16,8 +16,7 @@ function formatTokensToString(array) {
 
 // -------------- RUN ----------------
 function run(text) {
-	const lexer = new Lexer(text);
-	const tokens = lexer.tokenize();
+	const tokens = Lexer.tokenize(text);
 
 	// Abstract syntax tree time
 	const parser = new Parser(tokens);
