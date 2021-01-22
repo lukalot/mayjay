@@ -39,6 +39,6 @@ while (true) {
 	try {
 		run(input.trim());
 	} catch (error) {
-		console.log(error.stack);
+		console.error(error.stack);
 	}
 }
