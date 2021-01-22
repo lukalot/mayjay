@@ -1,3 +1,14 @@
+export class Token {
+	constructor(type, value) {
+		this.type = type;
+		this.value = value;
+	}
+
+	[Deno.customInspect]() {
+		return `${this.type.toString()} ${this.value}`;
+	}
+}
+
 export const TOKEN_TYPES = {
 	TYPE_NUMBER: { // Integers and Floats
 		ID: Symbol('NUMBER'),
@@ -60,4 +71,4 @@ export const TOKEN_TYPES = {
 		ID: Symbol('NAME'),
 		PATTERN: /^[A-Za-z][\d\w-_]*/ // Starts with a letter, and includes only letters, numbers from 0-9, dashes, and underscores
 	},
-}
+};
