@@ -6,7 +6,7 @@ class NumberNode {
 	}
 
 	[Deno.customInspect]() {
-		return `${this.token.type}:${this.token.value}`;
+		return `${this.token.type.toString()}:${this.token.value}`;
 	}
 }
 
