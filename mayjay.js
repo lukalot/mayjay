@@ -1,5 +1,5 @@
 import { Lexer } from './src/lexer.ts';
-import { Parser } from './src/parser.js';
+import { Parser } from './src/parser.ts';
 
 // Run with deno ( deno run mayjay.js )
 

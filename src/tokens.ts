@@ -9,8 +9,12 @@ export class Token {
 		this.value = value;
 	}
 
+	toString(): string {
+		return `${this.type.description} ${this.value}`;
+	}
+
 	[Deno.customInspect](): string {
-		return `${this.type.toString()} ${this.value}`;
+		return this.toString();
 	}
 }
 
