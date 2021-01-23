@@ -4,7 +4,7 @@ import { Parser } from './src/parser.ts';
 // Run with deno ( deno run mayjay.js )
 
 // -------------- RUN ----------------
-function run(text) {
+function run(text: string) {
 	const tokens = Lexer.tokenize(text);
 
 	// Abstract syntax tree time
